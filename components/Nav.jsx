@@ -3,20 +3,20 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { signIn, signOut, useSession, getProviders } from 'next-auth/react';
+import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
 const Nav = () => {
   const isUserloggedIn = true;
   const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
 
-    useEffect(() => {
-      (async () => {
-        const res = await getProviders();
-        setProviders(res);
-      })();
-    }, []);
-    
+  useEffect(() => {
+    (async () => {
+      const res = await getProviders();
+      setProviders(res);
+    })();
+  }, []);
+
   return (
     <nav className="flex-between w-full mb-16 pt-3">
       <Link href="/" className="flex gap-2 flex-center">
@@ -87,6 +87,23 @@ const Nav = () => {
                 >
                   My Profile
                 </Link>
+                <Link
+                  href="/create-prompt"
+                  className="dropdown_link"
+                  onClick={() => setToggleDropdown(false)}
+                >
+                  Create Prompt
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setToggleDropdown(false);
+                    signOut();
+                  }}
+                  className="mt-5 w-full black_btn"
+                >
+                  Sign Out
+                </button>
               </div>
             )}
           </div>
