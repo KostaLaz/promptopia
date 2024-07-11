@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
 const Nav = () => {
-  const isUserloggedIn = true;
+  const { data: session } = useSession();
   const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
 
@@ -22,17 +22,17 @@ const Nav = () => {
       <Link href="/" className="flex gap-2 flex-center">
         <Image
           src="/assets/images/logo.svg"
-          alt="Promptopia logo"
+          alt="logo"
           width={30}
           height={30}
           className="object-contain"
         />
-        <p className="logo_text">Promtopia</p>
+        <p className="logo_text">Promptopia</p>
       </Link>
 
-      {/* Desktop navigation */}
+      {/* Desktop Navigation */}
       <div className="sm:flex hidden">
-        {isUserloggedIn ? (
+        {session?.user ? (
           <div className="flex gap-3 md:gap-5">
             <Link href="/create-prompt" className="black_btn">
               Create Post
@@ -42,11 +42,11 @@ const Nav = () => {
             </button>
             <Link href="/profile">
               <Image
-                src="/assets/images/logo.svg"
+                src={session?.user.image}
                 width={37}
                 height={37}
                 className="rounded-full"
-                alt="Profile"
+                alt="profile"
               />
             </Link>
           </div>
@@ -57,25 +57,27 @@ const Nav = () => {
                 <button
                   type="button"
                   key={provider.name}
-                  onClick={() => signIn(provider.id)}
+                  onClick={() => {
+                    signIn(provider.id);
+                  }}
                   className="black_btn"
                 >
-                  Sign In
+                  Sign in
                 </button>
               ))}
           </>
         )}
       </div>
-      {/* Mobile navigation */}
+      {/* Mobile Navigation */}
       <div className="sm:hidden flex relative">
-        {isUserloggedIn ? (
+        {session?.user ? (
           <div className="flex">
             <Image
-              src="/assets/images/logo.svg"
+              src={session?.user.image}
               width={37}
               height={37}
               className="rounded-full"
-              alt="Profile"
+              alt="profile"
               onClick={() => setToggleDropdown(!toggleDropdown)}
             />
             {toggleDropdown && (
@@ -114,10 +116,12 @@ const Nav = () => {
                 <button
                   type="button"
                   key={provider.name}
-                  onClick={() => signIn(provider.id)}
+                  onClick={() => {
+                    signIn(provider.id);
+                  }}
                   className="black_btn"
                 >
-                  Sign In
+                  Sign in
                 </button>
               ))}
           </>
